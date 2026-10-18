@@ -237,6 +237,7 @@
       !power_photo
       !power_z_burn
       log_power_nuc_burn ! total thermal power from all burning, excluding photodisintegrations
+      lg_Lnuc_tot ! same quantity as log_power_nuc_burn; shorter PGSTAR axis label
       log_LH ! log10 power_h_burn
       log_LHe ! log10 power_he_burn
       log_LZ ! log10 total burning power including LC, but excluding LH and LHe and photodisintegrations

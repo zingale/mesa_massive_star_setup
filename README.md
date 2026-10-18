@@ -25,6 +25,9 @@ Dutch wind is used, with the factor controlling the wind specified
 in `inlist_mass_Z_wind_rotation` as `Dutch_scaling_factor`.  It
 can be turned off by setting this to 0.
 
+The value here is `0.2`, but some examples use `1.0`.  This should
+be explored.
+
 Wind is disabled at high temperature via
 `max_T_center_for_any_mass_loss` in `inlist_common`.  The timescale of
 evolution once the temperature reaches that value is so short that
@@ -39,8 +42,14 @@ enabled throughout the entire simulation.
 ### Convection
 
 Convection and semi-convection are enabled (Ledoux convection is
-enabled with `alpha_seminconvection = 1`.  The mixing lengths can be
+enabled with `alpha_seminconvection = 1`).  The mixing lengths can be
 set in `inlist_common`. Overshooting is also enabled.
+
+*Note for comparison*: the `star/test_suite/20M_pre_ms_to_core_collapse` example
+uses:
+
+* a custom alpha that is higher in H-rich material and lower elsewhere.
+* a much smaller `alpha_semiconvection` of `0.01`.
 
 
 ### Evolution endpoint
