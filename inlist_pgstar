@@ -242,7 +242,7 @@ TRho_Profile_title = ' '
 TRho_switch_to_Column_Depth = .false.
 TRho_switch_to_mass = .false.
 
-show_TRho_Profile_legend = .false.
+show_TRho_Profile_legend = .true.
  TRho_Profile_legend_coord = 0.07
  TRho_Profile_legend_fjust = 0.0
  TRho_Profile_legend_disp1 = -2.0
