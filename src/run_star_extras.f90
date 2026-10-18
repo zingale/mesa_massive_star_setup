@@ -47,7 +47,71 @@
          s% data_for_extra_history_columns => data_for_extra_history_columns
          s% how_many_extra_profile_columns => how_many_extra_profile_columns
          s% data_for_extra_profile_columns => data_for_extra_profile_columns
+         s% pg% TRho_pgstar_decorator => TRho_reference_lines
       end subroutine extras_controls
+
+      subroutine TRho_reference_lines(id, xmin, xmax, ymin, ymax, plot_num, ierr)
+         use pgstar_support, only: hydrogen_burn_logRho, hydrogen_burn_logT, &
+            helium_burn_logRho, helium_burn_logT, carbon_burn_logRho, carbon_burn_logT, &
+            oxygen_burn_logRho, oxygen_burn_logT, gamma_4_thirds_logRho, gamma_4_thirds_logT, &
+            Line_Type_Dash, Line_Type_Solid
+         use pgstar_colors, only: clr_Gray, clr_Gold
+         integer, intent(in) :: id, plot_num
+         real, intent(in) :: xmin, xmax, ymin, ymax
+         integer, intent(out) :: ierr
+         real :: x(2), y(2)
+
+         ierr = 0
+         call pgsave
+         call pgsci(clr_Gray)
+         call pgsls(Line_Type_Dash)
+         call pgslw(1)
+
+         ! Same approximate gas/radiation pressure boundary as TRho_Profile.
+         ! The built-in TRho plot already draws the electron degeneracy line.
+         x = [xmin, xmax]
+         y = real(log10(3.2d7)) + (x - real(log10(0.7d0)))/3.0
+         call reference_curve(x, y, 'P\drad\u = P\dgas\u')
+         call reference_curve(hydrogen_burn_logRho, hydrogen_burn_logT, 'H burn')
+         call reference_curve(helium_burn_logRho, helium_burn_logT, 'He burn')
+         call reference_curve(carbon_burn_logRho, carbon_burn_logT, 'C burn')
+         call reference_curve(oxygen_burn_logRho, oxygen_burn_logT, 'O burn')
+
+         call pgsci(clr_Gold)
+         call pgsls(Line_Type_Solid)
+         call reference_curve(gamma_4_thirds_logRho, gamma_4_thirds_logT, '\(0529)\d1\u = 4/3')
+         call pgunsa
+
+      contains
+
+         subroutine reference_curve(logRho, logT, label)
+            real, intent(in) :: logRho(:), logT(:)
+            character(len=*), intent(in) :: label
+            integer :: k
+            real :: fraction, label_x, label_y, char_height
+
+            call pgline(size(logRho), logRho, logT)
+            ! Put the label on a visible segment, even when the history axes
+            ! show only a small part of a reference curve.
+            do k = size(logRho)-1, 1, -1
+               label_x = max(min(logRho(k), logRho(k+1)), xmin + 0.08*(xmax-xmin))
+               label_x = min(label_x, xmax - 0.25*(xmax-xmin))
+               if (label_x < min(logRho(k), logRho(k+1)) .or. &
+                   label_x > max(logRho(k), logRho(k+1))) cycle
+               if (logRho(k+1) == logRho(k)) cycle
+               fraction = (label_x-logRho(k))/(logRho(k+1)-logRho(k))
+               label_y = logT(k) + fraction*(logT(k+1)-logT(k))
+               if (label_y <= ymin + 0.04*(ymax-ymin) .or. &
+                   label_y >= ymax - 0.08*(ymax-ymin)) cycle
+               call pgqch(char_height)
+               call pgsch(0.55*char_height)
+               call pgptxt(label_x, label_y + 0.02*(ymax-ymin), 0.0, 0.0, label)
+               call pgsch(char_height)
+               exit
+            end do
+         end subroutine reference_curve
+
+      end subroutine TRho_reference_lines
 
       subroutine extras_startup(id, restart, ierr)
          integer, intent(in) :: id

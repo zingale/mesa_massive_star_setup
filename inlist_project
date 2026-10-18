@@ -122,8 +122,8 @@ TRho_Profile_xmax = 10
 TRho_Profile_ymin = 3.35 !8.5
 TRho_Profile_ymax = 10.1
 
-TRho_logT_min = 8.8d0
-TRho_logRho_min = 6d0
+TRho_logT_min = 5.0d0
+TRho_logRho_min = -2.0d0
 TRho_logRho_max = 10d0
 TRho_logT_max = 10d0
 
