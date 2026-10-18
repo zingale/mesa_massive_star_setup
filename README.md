@@ -22,7 +22,7 @@ The network can be set in `inlist_project` as `new_net_name`.  The
 ### Wind
 
 Dutch wind is used, with the factor controlling the wind specified
-in `inlist_mass_Z_wind_rotation` as ``Dutch_scaling_factor`.  It
+in `inlist_mass_Z_wind_rotation` as `Dutch_scaling_factor`.  It
 can be turned off by setting this to 0.
 
 Wind is disabled at high temperature via
