@@ -17,7 +17,7 @@ pgstar_show_age = .false.
 
 Grid1_win_flag = .false.
 Grid1_win_width = 12
-Grid1_win_aspect_ratio = 0.666
+Grid1_win_aspect_ratio = 0.58
 
 ! Reduce outer margins to give all three columns more plotting width.
 Grid1_xleft = 0.06
@@ -28,7 +28,7 @@ Grid1_file_flag = .true.
 Grid1_file_dir = 'png'
 Grid1_file_prefix = 'Grid1_'
 Grid1_file_interval = 25     ! output when mod(model_number,Grid1_file_interval)==0
-Grid1_file_width = 27        ! (inches) negative means use same value as for window
+Grid1_file_width = 21.6        ! (inches) negative means use same value as for window (85 dpi)
 Grid1_file_aspect_ratio = -1 ! negative means use same value as for window
 
 ! reset the defaults
@@ -62,7 +62,7 @@ Grid1_plot_pad_left(1) = -0.03   ! fraction of full window width for padding on 
 Grid1_plot_pad_right(1) = 0.03   ! fraction of full window width for padding on right
 Grid1_plot_pad_top(1) = -0.06     ! fraction of full window height for padding at top
 Grid1_plot_pad_bot(1) = 0.0858   ! reduce Text_Summary1 height by 10%
-Grid1_txt_scale_factor(1) = 0.675 ! fit summary text within the first two columns
+Grid1_txt_scale_factor(1) = 0.8 ! fit summary text within the first two columns
 
 
 ! First column: HR above the central temperature-density history.
