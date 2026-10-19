@@ -148,7 +148,8 @@ Profile_Panels3_other_yaxis_name(3) = 'v_div_cs' ! 'vel_km_per_s' ! 'entropy'
 Profile_Panels3_other_dymin(3) = 0.14
 
 Profile_Panels3_yaxis_name(4) = 'logT'
-Profile_Panels3_other_yaxis_name(4) = 'burn_num_iters'
+Profile_Panels3_dymin(4) = 0.14
+Profile_Panels3_other_yaxis_name(4) = 'vel_km_per_s'
 
 ! x-axis limits and properties
 Profile_Panels3_xaxis_name = 'mass'
@@ -267,10 +268,10 @@ show_TRho_Profile_burn_lines = .true.
 show_TRho_Profile_burn_labels = .true.
 
 ! axis limits
-TRho_Profile_xmin = -12.0
+TRho_Profile_xmin = -15.0
 TRho_Profile_xmax = 10.0
-TRho_Profile_ymin = 3.0
-TRho_Profile_ymax = 10.0
+TRho_Profile_ymin = 3.35
+TRho_Profile_ymax = 10.1
 
 ! these are shown if show_TRho_Profile_mass_locs = .true.
 ! set all the entries
@@ -326,13 +327,13 @@ Text_Summary1_name(:,:) = ''
 
 
 Text_Summary1_name(1,1) = 'model_number'
-Text_Summary1_name(1,2) = 'log_dt'
+Text_Summary1_name(1,2) = 'time_step_sec'
 Text_Summary1_name(1,3) = 'Mass'
 Text_Summary1_name(1,4) = 'H_cntr'
 Text_Summary1_name(1,5) = 'H_rich'
 
 Text_Summary1_name(2,1) = 'non_fe_core_infall'
-Text_Summary1_name(2,2) = 'star_age'
+Text_Summary1_name(2,2) = 'star_age_sec'
 Text_Summary1_name(2,3) = 'lg_Mdot'
 Text_Summary1_name(2,4) = 'He_cntr'
 Text_Summary1_name(2,5) = 'He_core'
@@ -487,10 +488,10 @@ Mixing_file_aspect_ratio = -1 ! negative means use same value as for window
     TRho_txt_scale = 0.7
     TRho_title = ''
 
-    TRho_logT_min = -101d0
-    TRho_logT_max = -101d0
-    TRho_logRho_min = -101d0
-    TRho_logRho_max = -101d0
+    TRho_logT_min = 5.0d0
+    TRho_logT_max = 10d0
+    TRho_logRho_min = -2.0d0
+    TRho_logRho_max = 10d0
     show_TRho_degeneracy_line = .true.
     ! EOS and ignition reference curves supplied by run_star_extras.
     TRho_use_decorator = .true.
