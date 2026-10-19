@@ -62,31 +62,32 @@ stopping at `fe_core_infall_limit = 1e8` [cm/s].
 
 The mesh coefficients differ from the defaults in the following ways:
 
-| Control | This setup | Default | Effect |
+| Control | This setup | Default | Description |
 |---|---:|---:|---|
-| `mesh_delta_coeff` | 1.0 | 1.0 | Coarser mesh during most of the evolution |
-| `mesh_delta_coeff_for_highT` | 1.0 | 3.0 | Finer mesh at high central temperature |
-| `varcontrol_target` | 1e-3 | 1e-3 | Unchanged |
+| `mesh_delta_coeff` | 1.0 | 1.0 | Scales mesh-spacing criteria; smaller values produce a finer spatial mesh. |
+| `mesh_delta_coeff_for_highT` | 1.0 | 3.0 | Mesh-spacing coefficient used at high central temperatures, with a transition between the standard and high-temperature regimes. |
+| `varcontrol_target` | 1e-3 | 1e-3 | Target relative change in stellar structure between models, used to adjust the timestep. |
 
 The timestep limits differ as:
 
-| Control | This setup | Default | Effect |
+| Control | This setup | Default | Description |
 |---|---:|---:|---|
-| `time_delta_coeff` | 1.0 | 1.0 | Unchanged overall timestep multiplier |
-| `delta_lgT_cntr_limit` | 0.002 | 0.01 | 5× tighter central-temperature change limit |
-| `delta_lgT_max_limit` | 0.002 | Disabled | Adds a maximum-temperature change limit |
-| `delta_lgRho_cntr_limit` | 0.05 | 0.05 | Unchanged |
-| `delta_lgRho_limit` | 0.1 | 1.0 | 10× tighter density-change limit |
-| `dX_nuc_drop_limit` | 0.01 | 0.05 | 5× tighter abundance-drop limit |
-| `delta_XSi_cntr_limit` | 0.0025 | 0.01 | 4× tighter central silicon-change limit |
-| `max_timestep_factor` | 1.05 | 1.2 | Slower permitted timestep growth |
+| `time_delta_coeff` | 1.0 | 1.0 | Scales real-valued timestep limits and hard limits; smaller values give finer time resolution. Does not scale `varcontrol_target` or integer iteration limits. |
+| `delta_lgT_cntr_limit` | 0.002 | 0.01 | Timestep-control limit on the magnitude of the change in log10 central temperature between models. |
+| `delta_lgT_max_limit` | 0.002 | Disabled | Timestep-control limit on the magnitude of the change in log10 of the highest temperature anywhere in the star. |
+| `delta_lgRho_cntr_limit` | 0.05 | 0.05 | Timestep-control limit on the magnitude of the change in log10 central density between models. |
+| `delta_lgRho_cntr_hard_limit` | 0.1 | Disabled (-1) | Hard limit on the magnitude of the change in log10 central density; exceeding it triggers a retry with a smaller timestep. |
+| `delta_lgRho_limit` | 0.1 | 1.0 | Timestep-control limit on the largest magnitude of change in log10 density in any cell. |
+| `dX_nuc_drop_limit` | 0.01 | 0.05 | Limits the drop in an isotope's mass fraction from nuclear burning, accounting for replenishment by mixing; larger drops reduce the next timestep. |
+| `delta_XSi_cntr_limit` | 0.0025 | 0.01 | Limits the absolute change in central silicon mass fraction between models; larger changes reduce the next timestep. |
+| `max_timestep_factor` | 1.05 | 1.2 | Maximum ratio of the next timestep to the previous one, limiting how quickly timesteps can grow. |
 
 Composition resolution is controlled by
 
-| Control | This setup | Default | Effect |
+| Control | This setup | Default | Description |
 |---|---:|---:|---|
-| `min_dq_for_xa` | 1e-4 | 1e-14 | Restricts composition-driven refinement where gradr <= grada |
-| `min_dq_for_xa_convective` | 1e-6 | 1e-6 | Unchanged composition-driven refinement threshold where gradr > grada |
+| `min_dq_for_xa` | 1e-4 | 1e-14 | Minimum cell size in fractional stellar mass (`dq`) eligible for splitting due to composition gradients where gradr <= grada; larger values suppress refinement of small cells. |
+| `min_dq_for_xa_convective` | 1e-6 | 1e-6 | Corresponding minimum cell size for composition-driven splitting where gradr > grada; a nonpositive value uses `min_dq_for_xa` instead. |
 
 The control for non-convective regions is much looser.
 
