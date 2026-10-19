@@ -64,8 +64,8 @@ The mesh coefficients differ from the defaults in the following ways:
 
 | Control | This setup | Default | Effect |
 |---|---:|---:|---|
-| `mesh_delta_coeff` | 2.0 | 1.0 | Coarser mesh during most of the evolution |
-| `mesh_delta_coeff_for_highT` | 1.5 | 3.0 | Finer mesh at high central temperature |
+| `mesh_delta_coeff` | 1.0 | 1.0 | Coarser mesh during most of the evolution |
+| `mesh_delta_coeff_for_highT` | 1.0 | 3.0 | Finer mesh at high central temperature |
 | `varcontrol_target` | 1e-3 | 1e-3 | Unchanged |
 
 The timestep limits differ as:
