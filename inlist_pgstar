@@ -414,8 +414,8 @@ Abundance_line_txt_scale_factor = 1.1
 
 
 ! number and size of isotopes on legend
-Abundance_legend_max_cnt = 10
-Abundance_legend_txt_scale_factor = 1.3
+Abundance_legend_max_cnt = 12
+Abundance_legend_txt_scale_factor = 1.1
 
 ! yaxis limits
 Abundance_log_mass_frac_min = -4!-6.4 ! -3.5
@@ -445,8 +445,8 @@ Power_ytop = 0.85
 Power_txt_scale = 1.1
 Power_title = ' '
 
-Power_legend_max_cnt = 10
-Power_legend_txt_scale_factor = 1.3 ! relative to other text
+Power_legend_max_cnt = 12
+Power_legend_txt_scale_factor = 1.1 ! relative to other text
 
 ! power yaxis limits -- to override system default selections
 Power_ymin = -5.0 !   -101d0 ! only used if /= -101d0
