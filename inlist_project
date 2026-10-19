@@ -100,4 +100,6 @@
 / ! end of controls namelist
 
 
+&pgstar
+/ ! end of pgstar namelist
 
