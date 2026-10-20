@@ -22,10 +22,6 @@
       show_retry_counts_when_terminate = .true.
       show_timestep_limit_counts_when_terminate = .true.
 
-      ! pgstar is recommended for diagnosing issues and understanding the evolution
-      pgstar_flag = .true.
-      save_pgstar_files_when_terminate = .true.
-
 / ! end of star_job namelist
 
 &eos
@@ -247,17 +243,7 @@
       report_solver_progress = .false. ! set true to see info about solver iterations
       report_ierr = .true. ! if true, produce terminal output when have some internal error
 
-/
+/ ! end of controls namelist
+
 &pgstar
-
-!pause_flag = .true.
-
-!pgstar_interval = 1
-
-! x-axis limits and properties
-Profile_Panels3_xaxis_name = 'mass'
-Profile_Panels3_xmin = 0.0
-Profile_Panels3_xmax = 1.6
-Profile_Panels3_xaxis_reversed = .false.
-
 / ! end of pgstar namelist
