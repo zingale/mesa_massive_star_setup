@@ -42,6 +42,9 @@
 
 &controls
 
+      ! we have a custom HR diagram that shows radii
+      use_other_pgstar_plots = .true.
+
 ! wind
       ! Dutch scaling factor set in inlist_mass_Z_wind_rotation
       cool_wind_full_on_T = 0.8d4

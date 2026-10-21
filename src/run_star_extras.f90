@@ -48,7 +48,136 @@
          s% how_many_extra_profile_columns => how_many_extra_profile_columns
          s% data_for_extra_profile_columns => data_for_extra_profile_columns
          s% pg% TRho_pgstar_decorator => TRho_reference_lines
+         s% other_pgstar_plots_info => HR_radius_plot_info
       end subroutine extras_controls
+
+      subroutine HR_radius_plot_info(id, ierr)
+         use star_pgstar, only: pgstar_win_file_data, i_Other
+         integer, intent(in) :: id
+         integer, intent(out) :: ierr
+         type(star_info), pointer :: s
+         type(pgstar_win_file_data), pointer :: p
+
+         call star_ptr(id, s, ierr)
+         if (ierr /= 0) return
+         p => s% pg% pgstar_win_file_ptr(i_Other)
+         p% id = i_Other
+         p% name = 'HR_with_radius'
+         p% plot => HR_radius_plot
+         p% do_plot_in_grid => HR_radius_grid_plot
+         p% okay_to_call_do_plot_in_grid = .true.
+         ! This custom plot is embedded in Grid1; Grid1 controls its output.
+         p% win_flag = .false.
+         p% file_flag = .false.
+      end subroutine HR_radius_plot_info
+
+      subroutine HR_radius_plot(id, device_id, ierr)
+         integer, intent(in) :: id, device_id
+         integer, intent(out) :: ierr
+         type(star_info), pointer :: s
+
+         call star_ptr(id, s, ierr)
+         if (ierr /= 0) return
+         call pgslct(device_id)
+         call pgbbuf()
+         call pgeras()
+         call HR_radius_grid_plot(id, device_id, s% pg% HR_xleft, s% pg% HR_xright, &
+            s% pg% HR_ybot, s% pg% HR_ytop, 1.0, ierr)
+         call pgebuf()
+      end subroutine HR_radius_plot
+
+      subroutine HR_radius_grid_plot(id, device_id, xleft, xright, ybot, ytop, txt_scale, ierr)
+         use pgstar_hist_track, only: do_Hist_Track
+         integer, intent(in) :: id, device_id
+         real, intent(in) :: xleft, xright, ybot, ytop, txt_scale
+         integer, intent(out) :: ierr
+         type(star_info), pointer :: s
+
+         call star_ptr(id, s, ierr)
+         if (ierr /= 0) return
+         ! Use the stock HR history renderer and all the usual HR controls.
+         ! Its built-in decoration callback runs while the HR axes are active;
+         ! the generic pgstar decorator runs after they are restored in 26.04.1.
+         call do_Hist_Track(s, id, device_id, &
+            xleft, xright, ybot, ytop, .true., s% pg% HR_title, txt_scale*s% pg% HR_txt_scale, &
+            'log_Teff', 'log_L', 'log Teff', 'log L/L\d\(2281)', &
+            s% pg% HR_logT_min, s% pg% HR_logT_max, s% pg% HR_logT_margin, s% pg% HR_dlogT_min, &
+            s% pg% HR_logL_min, s% pg% HR_logL_max, s% pg% HR_logL_margin, s% pg% HR_dlogL_min, &
+            s% pg% HR_step_min, s% pg% HR_step_max, .true., .false., .false., .false., &
+            s% pg% show_HR_target_box, s% pg% HR_target_n_sigma, &
+            s% pg% HR_target_logT, s% pg% HR_target_logL, s% pg% HR_target_logT_sigma, s% pg% HR_target_logL_sigma, &
+            s% pg% show_HR_annotation1, s% pg% show_HR_annotation2, s% pg% show_HR_annotation3, &
+            s% pg% HR_fname, .false., s% pg% HR_pgstar_decorator, HR_radius_decorate, ierr)
+      end subroutine HR_radius_grid_plot
+
+      subroutine HR_radius_decorate(id, ierr)
+         use pgstar_hr, only: HR_decorate
+         integer, intent(in) :: id
+         integer, intent(out) :: ierr
+         type(star_info), pointer :: s
+         real :: xmin, xmax, ymin, ymax
+
+         call HR_decorate(id, ierr)
+         if (ierr /= 0) return
+         call star_ptr(id, s, ierr)
+         if (ierr /= 0) return
+         if (.not. s% pg% HR_use_decorator) return
+         call pgqwin(xmin, xmax, ymin, ymax)
+         call HR_radius_lines(id, xmin, xmax, ymin, ymax, 0, ierr)
+      end subroutine HR_radius_decorate
+
+      subroutine HR_radius_lines(id, xmin, xmax, ymin, ymax, plot_num, ierr)
+         use pgstar_support, only: Line_Type_Dash
+         use pgstar_colors, only: clr_Gray
+         integer, intent(in) :: id, plot_num
+         real, intent(in) :: xmin, xmax, ymin, ymax
+         integer, intent(out) :: ierr
+         character(len=24), parameter :: labels(4) = [character(len=24) :: &
+            '1 R\d\(2281)\u', '10 R\d\(2281)\u', &
+            '100 R\d\(2281)\u', '1000 R\d\(2281)\u']
+         real :: x(2), y(2), xlo, xhi, ylo, yhi, dx, dy
+         real :: intercept, label_lo, label_hi, label_x, char_height
+         integer :: i
+
+         ierr = 0
+         ! HR temperature axes run from hot to cool; handle either ordering.
+         xlo = min(xmin, xmax)
+         xhi = max(xmin, xmax)
+         ylo = min(ymin, ymax)
+         yhi = max(ymin, ymax)
+         dx = xhi - xlo
+         dy = yhi - ylo
+         if (dx <= 0.0 .or. dy <= 0.0) return
+
+         call pgsave
+         call pgsci(clr_Gray)
+         call pgsls(Line_Type_Dash)
+         call pgslw(1)
+         call pgqch(char_height)
+         call pgsch(0.55*char_height)
+
+         do i = 1, size(labels)
+            ! L/Lsun = 4*pi*sigma*Rsun**2/Lsun * (R/Rsun)**2 * Teff**4.
+            ! The four radii are 10**(i-1) solar radii.
+            intercept = real(log10(4.0_dp*pi*boltz_sigma*Rsun**2/Lsun) + 2.0_dp*(i-1))
+            ! Clip the line to the current axes before drawing it.
+            x(1) = max(xlo, (ylo-intercept)/4.0)
+            x(2) = min(xhi, (yhi-intercept)/4.0)
+            if (x(1) >= x(2)) cycle
+            y = 4.0*x + intercept
+            call pgline(2, x, y)
+
+            ! Label an interior segment so labels follow changing axis limits.
+            label_lo = max(xlo + 0.12*dx, (ylo + 0.08*dy-intercept)/4.0)
+            label_hi = min(xhi - 0.12*dx, (yhi - 0.12*dy-intercept)/4.0)
+            if (label_lo >= label_hi) cycle
+            label_x = 0.5*(label_lo + label_hi)
+            call pgptxt(label_x, 4.0*label_x + intercept + 0.02*dy, &
+               0.0, 0.5, trim(labels(i)))
+         end do
+
+         call pgunsa
+      end subroutine HR_radius_lines
 
       subroutine TRho_reference_lines(id, xmin, xmax, ymin, ymax, plot_num, ierr)
          use pgstar_support, only: hydrogen_burn_logRho, hydrogen_burn_logT, &

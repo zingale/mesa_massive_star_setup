@@ -1,3 +1,4 @@
+
 &pgstar
 
 !pause_flag = .true.
@@ -68,7 +69,7 @@ Grid1_txt_scale_factor(1) = 0.8 ! fit summary text within the first two columns
 
 
 ! First column: HR above the central temperature-density history.
-Grid1_plot_name(3) = 'HR'
+Grid1_plot_name(3) = 'HR_with_radius'
 Grid1_plot_row(3) = 2           ! number from 1 at top
 Grid1_plot_rowspan(3) = 2       ! plot spans this number of rows
 Grid1_plot_col(3) =  1          ! number from 1 at left
@@ -100,14 +101,14 @@ Grid1_plot_rowspan(2) = 2       ! plot spans this number of rows
 Grid1_plot_col(2) =  2          ! number from 1 at left
 Grid1_plot_colspan(2) = 1       ! plot spans this number of columns
 
-Grid1_plot_pad_left(2) = 0.00    ! align left axis with History_Panels1 below
+Grid1_plot_pad_left(2) = 0.00    ! align left axis with Profile_Panels2 below
 Grid1_plot_pad_right(2) = 0.06   ! fraction of full window width for padding on right
 Grid1_plot_pad_top(2) = -0.04     ! fraction of full window height for padding at top
 Grid1_plot_pad_bot(2) = 0.03    ! fraction of full window height for padding at bottom
 Grid1_txt_scale_factor(2) = 0.7 ! multiply txt_scale for subplot by this
 
 
-Grid1_plot_name(4) = 'History_Panels1'
+Grid1_plot_name(4) = 'Profile_Panels2'
 Grid1_plot_row(4) = 4           ! number from 1 at top
 Grid1_plot_rowspan(4) = 2       ! plot spans this number of rows
 Grid1_plot_col(4) =  2          ! number from 1 at left
@@ -129,7 +130,7 @@ Grid1_plot_colspan(6) = 1       ! plot spans this number of columns
 Grid1_plot_pad_left(6) = 0.04    ! fraction of full window width for padding on left
 Grid1_plot_pad_right(6) = 0.06   ! fraction of full window width for padding on right
 Grid1_plot_pad_top(6) = -0.06    ! align with the top of Text_Summary1
-Grid1_plot_pad_bot(6) = 0     ! fraction of full window height for padding at bottom
+Grid1_plot_pad_bot(6) = 0.0     ! fraction of full window height for padding at bottom
 Grid1_txt_scale_factor(6) = 0.6 ! multiply txt_scale for subplot by this
 
 
@@ -139,19 +140,11 @@ Profile_Panels3_win_flag = .false.
 
 Profile_Panels3_title = ''
 
-Profile_Panels3_num_panels = 4
+Profile_Panels3_num_panels = 2
 
 Profile_Panels3_yaxis_name(1) = 'Abundance'
 
 Profile_Panels3_yaxis_name(2) = 'Power'
-
-Profile_Panels3_yaxis_name(3) = 'logRho'
-Profile_Panels3_other_yaxis_name(3) = 'v_div_cs' ! 'vel_km_per_s' ! 'entropy'
-Profile_Panels3_other_dymin(3) = 0.14
-
-Profile_Panels3_yaxis_name(4) = 'logT'
-Profile_Panels3_dymin(4) = 0.14
-Profile_Panels3_other_yaxis_name(4) = 'vel_km_per_s'
 
 ! x-axis limits and properties
 Profile_Panels3_xaxis_name = 'mass'
@@ -169,6 +162,27 @@ Profile_Panels3_txt_scale = 0.7
 
 !Profile_Panels3_show_grid = .true.
 Profile_Panels3_show_mix_regions_on_xaxis = .true.
+
+!------------------------------------------------------------------------------------
+
+Profile_Panels2_win_flag = .false.
+Profile_Panels2_title = ''
+Profile_Panels2_num_panels = 2
+
+Profile_Panels2_yaxis_name(1) = 'logRho'
+Profile_Panels2_other_yaxis_name(1) = 'v_div_cs' ! 'vel_km_per_s' ! 'entropy'
+Profile_Panels2_other_dymin(1) = 0.14
+
+Profile_Panels2_yaxis_name(2) = 'logT'
+Profile_Panels2_dymin(2) = 0.14
+Profile_Panels2_other_yaxis_name(2) = 'vel_km_per_s'
+
+Profile_Panels2_xaxis_name = 'mass'
+Profile_Panels2_xmin = 0.0
+Profile_Panels2_xmax = -101d0
+Profile_Panels2_xaxis_reversed = .false.
+Profile_Panels2_txt_scale = 0.7
+Profile_Panels2_show_mix_regions_on_xaxis = .true.
 
 !------------------------------------------------------------------------------------
 
@@ -416,8 +430,8 @@ Abundance_line_txt_scale_factor = 1.1
 
 
 ! number and size of isotopes on legend
-Abundance_legend_max_cnt = 12
-Abundance_legend_txt_scale_factor = 1.1
+Abundance_legend_max_cnt = 15
+Abundance_legend_txt_scale_factor = 1.2
 
 ! yaxis limits
 Abundance_log_mass_frac_min = -4!-6.4 ! -3.5
@@ -448,7 +462,7 @@ Power_txt_scale = 1.1
 Power_title = ' '
 
 Power_legend_max_cnt = 12
-Power_legend_txt_scale_factor = 1.1 ! relative to other text
+Power_legend_txt_scale_factor = 1.2 ! relative to other text
 
 ! power yaxis limits -- to override system default selections
 Power_ymin = -5.0 !   -101d0 ! only used if /= -101d0
@@ -550,7 +564,8 @@ Mixing_file_aspect_ratio = -1 ! negative means use same value as for window
 
          ! Enables calling a subroutine to add extra information to a plot
          ! see `$MESA_DIR/star/other/pgstar_decorator.f90`
-         HR_use_decorator = .false.
+         ! Used by the custom HR_with_radius grid plot in run_star_extras.
+         HR_use_decorator = .true.
 
 
          ! file output
