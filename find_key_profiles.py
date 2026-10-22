@@ -157,44 +157,43 @@ def plot_structure(profile):
 
     model = mr.MesaData(profile)
 
-    fig = plt.figure()
-    ax = fig.add_subplot(211)
+    fig, (axt, axb) = plt.subplots(2, 1, height_ratios=[1, 2],
+                                   layout="constrained", figsize=(6, 10))
 
     r = model.radius
     rho = 10.0**model.logRho
     T = 10.0**model.logT
     ye = model.ye
 
-    l1 = ax.plot(r, rho, label=r"$\rho$")
-    l2 = ax.plot(r, T, label=r"$T$")
+    l1 = axt.plot(r, rho, label=r"$\rho$")
+    l2 = axt.plot(r, T, label=r"$T$")
 
-    ax.set_xscale("log")
-    ax.set_yscale("log")
+    axt.set_xscale("log")
+    axt.set_yscale("log")
 
-    #ax.set_xlabel("r [cm]")
-    ax.set_ylabel(r"$\rho~[\rm{g/cm^3}]$, $T~[K]$")
+    #axt.set_xlabel("r [cm]")
+    axt.set_ylabel(r"$\rho~[\rm{g/cm^3}]$, $T~[K]$")
 
-    ax.grid(color="b", alpha=0.5, ls=":")
+    axt.grid(color="b", alpha=0.5, ls=":")
 
-    ax.set_ylim(None, 1.e10)
+    axt.set_ylim(None, 1.e10)
 
-    ax2 = ax.twinx()
+    ax2 = axt.twinx()
 
     ax2.set_ylabel(r"$Y_e$")
     l3 = ax2.plot(r, ye, color="C2", label="$Y_e$")
 
     lns = l1 + l2 + l3
     labs = [l.get_label() for l in lns]
-    ax.legend(lns, labs, frameon=False, loc="best", fontsize="small")
+    axt.legend(lns, labs, frameon=False, loc="best", fontsize="small")
 
     # get the nuclei from the model file
     nuclei = get_nuclei(model)
 
-    ax.margins(0.0)
+    axt.margins(0.0)
 
-    ax = fig.add_subplot(212)
     threshold = 0.01
-    skip_value = 5.e-5
+    skip_value = 5.e-4
 
     high_color_index = 0
     low_color_index = 0
@@ -224,22 +223,20 @@ def plot_structure(profile):
             color = f"C{trace_color_index}"
             trace_color_index += 1
 
-        ax.plot(r, X, label=f"{nuc!s}", lw=lw, ls=ls, color=color)
+        axb.plot(r, X, label=f"{nuc!s}", lw=lw, ls=ls, color=color)
 
-    ax.set_xscale("log")
-    ax.set_yscale("log")
+    axb.set_xscale("log")
+    axb.set_yscale("log")
 
-    ax.set_xlabel("r [cm]")
-    ax.set_ylabel("mass fraction")
+    axb.set_xlabel(r"r [$R_\odot$]")
+    axb.set_ylabel("mass fraction")
 
-    ax.margins(0)
-    ax.set_ylim(skip_value, 1.1)
+    axb.margins(0)
+    axb.set_ylim(skip_value, 1.1)
 
-    ax.grid(color="b", alpha=0.5, ls=":")
-    ax.legend(frameon=True, edgecolor="w",
+    axb.grid(color="b", alpha=0.5, ls=":")
+    axb.legend(frameon=True, edgecolor="w",
               ncol=2, framealpha=0.5, fontsize="small")
-
-    fig.set_size_inches(6, 9)
 
     return fig
 
@@ -299,7 +296,6 @@ if __name__ == "__main__":
             if key in pinfo.stages:
                 # the key is a nucleus
                 fig.suptitle(f"{key.capitalize()} {name.replace('_', ' ')}")
-                fig.tight_layout()
                 fig.savefig(f"{name}_{key}.png")
 
                 # for the copy
@@ -308,7 +304,6 @@ if __name__ == "__main__":
             else:
                 # the key is a time before collapse (in minutes)
                 fig.suptitle(f"{key} minutes before collapse...")
-                fig.tight_layout()
                 fig.savefig(f"collapse_in_{key}_minutes.png")
 
                 # for the copy
