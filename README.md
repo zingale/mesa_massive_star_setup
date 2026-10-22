@@ -18,7 +18,6 @@ are set in `inlist_mass_Z_wind_rotation`.
 The network can be set in `inlist_project` as `new_net_name`.  The
 `approx21_plus_co56.net` runs very well with this setup.
 
-
 ### Wind
 
 Dutch wind is used, with the factor controlling the wind specified
@@ -32,7 +31,6 @@ Wind is disabled at high temperature via
 `max_T_center_for_any_mass_loss` in `inlist_common`.  The timescale of
 evolution once the temperature reaches that value is so short that
 wind doesn't matter.
-
 
 ### Hydrodynamics
 
@@ -50,7 +48,6 @@ uses:
 
 * a custom alpha that is higher in H-rich material and lower elsewhere.
 * a much smaller `alpha_semiconvection` of `0.01`.
-
 
 ### Evolution endpoint
 
@@ -91,6 +88,7 @@ Composition resolution is controlled by
 
 The control for non-convective regions is much looser.
 
+
 ## Tolerances and solver
 
 ### Central fuel depletion
@@ -114,9 +112,6 @@ The limit on relative energy-conservation error timestep changes is disabled in 
 `run_star_extras.f90` loosens the tolerances on burning convergence at
 late times (high temperatures).
 
-
-
-
 ### Operator-splitting
 
 Operator-splitting of the burning is off by default.  It can be
@@ -131,3 +126,23 @@ This may be needed for large networks.
 Here's the current pgstar output:
 
 ![pgstar](docs/Grid1_004000.png)
+
+
+## Visualization
+
+### Profiles
+
+The script ``find_key_profiles.py`` will make plots of the density,
+temperature, $Y_e$ and composition profiles at various times of
+interest: ignition of a fuel source, exhaustion of the fuel source,
+and several times shortly before collapse.  It also copies the
+profiles corresponding to these times in case they are wanted for
+further study.
+
+### Kippenhahn diagrams
+
+The script ``kipp.py`` will make several different Kippenhahn diagrams
+of the evolution.  It relies on a local installation of
+https://github.com/zingale/mkipp2
+
+
