@@ -124,3 +124,10 @@ enabled by setting `op_split_burn = .true.` in `inlist_common`.  There
 is also a control to determine at what temperature it kicks in.
 
 This may be needed for large networks.
+
+
+## PGStar
+
+Here's the current pgstar output:
+
+![pgstar](docs/Grid1_004000.png)
