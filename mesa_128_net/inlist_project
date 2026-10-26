@@ -1,0 +1,105 @@
+&star_job
+      show_log_description_at_start = .false.
+
+      load_saved_model = .false.
+
+      create_pre_main_sequence_model = .true.
+      pre_ms_T_c = 3d5
+      pre_ms_relax_num_steps = 300
+      pre_ms_relax_to_start_radiative_core = .true.
+
+      set_initial_age = .true.
+      initial_age = 0
+      set_initial_model_number = .true.
+      initial_model_number = 0
+
+      change_net = .true.
+      new_net_name = 'mesa_128.net'
+      dump_missing_metals_into_heaviest = .false.
+
+      save_model_when_terminate = .true.
+      save_model_filename = 'final.mod'
+      !required_termination_code_string = 'fe_core_infall_limit'
+
+      !set_initial_dt = .true.
+      !seconds_for_initial_dt = 1d1 ! helps loading model without crashing
+
+/ ! end of star_job namelist
+
+&eos
+/ ! end of eos namelist
+
+&kap
+/ ! end of kap namelist
+
+&controls
+
+! stopping conditions
+
+      ! stop at He-core depletion
+      !xa_central_lower_limit_species(1) = 'he4'
+      !xa_central_lower_limit(1) = 1d-6
+
+      ! stop at CC.
+      fe_core_infall_limit = 1d8
+
+
+      delta_lg_XH_cntr_min   = 0.5d0
+      delta_lg_XO_cntr_min   = 0.5d0
+      delta_lg_XC_cntr_min   = 0.5d0
+      delta_lg_XHe_cntr_min   = 0.5d0
+
+
+! wind
+
+! atmosphere
+      ! let's change the outer BC to a momemtum BC to stabalize the surface on our way to cc.
+      ! we also change Pextra_factor to 1 since the timescales are shorter.
+      use_momentum_outer_BC = .true.
+      Pextra_factor = 1
+
+! rotation
+
+! mlt
+
+! mixing
+
+      set_min_D_mix = .true.
+      min_D_mix = 1d-2
+
+! timesteps
+
+      delta_XSi_cntr_limit = 0.0025
+
+! mesh
+
+! solver
+
+! output
+      terminal_show_age_units = 'secs'
+      terminal_show_timestep_units = 'secs'
+      terminal_show_log_dt = .false.
+      terminal_show_log_age = .false.
+
+      num_trace_history_values = 8
+      trace_history_value_name(1) = 'time_step_sec'
+      trace_history_value_name(2) = 'Fe_core'
+      trace_history_value_name(3) = 'fe_core_infall'
+      trace_history_value_name(4) = 'center_ye'
+      trace_history_value_name(5) = 'center_rho'
+      trace_history_value_name(6) = 'rel_E_err'
+      trace_history_value_name(7) = 'log_rel_run_E_err'
+      trace_history_value_name(8) = 'dt_div_max_tau_conv'
+
+      !photo_interval = 1000
+      !profile_interval = 1
+      !history_interval = 1
+      !terminal_interval = 1!10
+
+
+/ ! end of controls namelist
+
+
+&pgstar
+/ ! end of pgstar namelist
+
