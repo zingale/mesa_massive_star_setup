@@ -430,7 +430,7 @@ Abundance_line_txt_scale_factor = 1.1
 
 
 ! number and size of isotopes on legend
-Abundance_legend_max_cnt = 15
+Abundance_legend_max_cnt = 18
 Abundance_legend_txt_scale_factor = 1.2
 
 ! yaxis limits
@@ -663,7 +663,7 @@ file_device = 'png'            ! options 'png' and 'vcps' for png and postscript
 !file_device = 'vcps'            ! options 'png' and 'vcps' for png and postscript respectively
 
 kipp_win_flag=.false.
-kipp_file_flag=.true.
+kipp_file_flag=.false.
 Kipp_mix_interval = 1
 Kipp_show_luminosities = .true.
 

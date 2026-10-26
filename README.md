@@ -24,7 +24,7 @@ Dutch wind is used, with the factor controlling the wind specified
 in `inlist_mass_Z_wind_rotation` as `Dutch_scaling_factor`.  It
 can be turned off by setting this to 0.
 
-The value here is `0.2`, but some examples use `1.0`.  This should
+The value here is `0.8`, but some examples use `1.0`.  This should
 be explored.
 
 Wind is disabled at high temperature via
