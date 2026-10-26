@@ -9,8 +9,8 @@
 / ! end of kap namelist
 
 &controls
-   initial_mass = 20
+   initial_mass = 15
    initial_z = 1.42d-2 ! solar
    initial_y = 0.2703d0 ! from asplund et al. 2009, solar.
-   Dutch_scaling_factor = 0.2d0
+   Dutch_scaling_factor = 0.8d0
 / ! end of controls namelist
