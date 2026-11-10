@@ -42,9 +42,6 @@
 
 &controls
 
-      ! we have a custom HR diagram that shows radii
-      use_other_pgstar_plots = .true.
-
 ! wind
       ! Dutch scaling factor set in inlist_mass_Z_wind_rotation
       cool_wind_full_on_T = 0.8d4
@@ -117,8 +114,8 @@
 ! operator splitting for burning
       op_split_burn = .true.
       op_split_burn_min_T = 1d9
-      burn_steps_limit = 150
-      burn_steps_hard_limit = 250
+      burn_steps_limit = 250
+      burn_steps_hard_limit = 500
       op_split_burn_eps = 1d-6 !1d-5
       op_split_burn_odescal = 1d-7 !1d-5
 
