@@ -1,3 +1,4 @@
+from cycler import cycler
 import re
 from pathlib import Path
 import shutil
@@ -5,6 +6,25 @@ import shutil
 import mesa_reader as mr
 import numpy as np
 import matplotlib.pyplot as plt
+
+
+# use a color cycler with 12 colors
+colors = plt.get_cmap("Paired").colors
+plt.rcParams["axes.prop_cycle"] = cycler(color=colors)
+
+
+# standard colors
+NUC_COLORS = {"h1": "C0",
+              "he4": "C2",
+              "c12": "C4",
+              "o16": "C6",
+              "ne20": "C8",
+              "si28": "C11",  # C10 is low contrast
+              "s32": "C1",
+              "cr54": "C3",
+              "fe54": "C5",
+              "fe56": "C7",
+              "fe58": "C9"}
 
 
 class ImportantProfiles:
@@ -165,8 +185,8 @@ def plot_structure(profile):
     T = 10.0**model.logT
     ye = model.ye
 
-    l1 = axt.plot(r, rho, label=r"$\rho$")
-    l2 = axt.plot(r, T, label=r"$T$")
+    l1 = axt.plot(r, rho, label=r"$\rho$", color="C1")
+    l2 = axt.plot(r, T, label=r"$T$", color="C7")
 
     axt.set_xscale("log")
     axt.set_yscale("log")
@@ -181,7 +201,7 @@ def plot_structure(profile):
     ax2 = axt.twinx()
 
     ax2.set_ylabel(r"$Y_e$")
-    l3 = ax2.plot(r, ye, color="C2", label="$Y_e$")
+    l3 = ax2.plot(r, ye, label="$Y_e$", color="C3")
 
     lns = l1 + l2 + l3
     labs = [l.get_label() for l in lns]
@@ -195,33 +215,34 @@ def plot_structure(profile):
     threshold = 0.01
     skip_value = 5.e-4
 
-    high_color_index = 0
     low_color_index = 0
-    trace_color_index = 0
 
-    for nuc in nuclei:
+    # do only the top 20 nuclei
+    sorted_nuc = sorted(nuclei, key=lambda n: getattr(model, f"{n}").max(), reverse=True)
+
+    num_to_plot = 20
+    plot_nuc = sorted_nuc[:num_to_plot]
+
+    # now sort by mass number
+    plot_nuc = sorted(plot_nuc, key=lambda s: int(re.search(r"\d+$", s).group()))
+
+    for nuc in plot_nuc:
         X = getattr(model, f"{nuc}")
         Xmax = X.max()
 
         if Xmax < skip_value:
             continue
 
-        if Xmax > threshold:
-            if Xmax > 0.25:
-                lw = 2.5
-                ls = "-"
-                color = f"C{high_color_index}"
-                high_color_index += 1
-            else:
-                lw = 1.5
-                ls = "--"
-                color = f"C{low_color_index}"
-                low_color_index += 1
+        if nuc in NUC_COLORS:
+            lw = 2.5
+            ls = "-"
+            color = NUC_COLORS[nuc]
+
         else:
-            lw = 1
-            ls = ":"
-            color = f"C{trace_color_index}"
-            trace_color_index += 1
+            lw = 1.5
+            ls = "--"
+            color = f"C{low_color_index}"
+            low_color_index += 1
 
         axb.plot(r, X, label=f"{nuc!s}", lw=lw, ls=ls, color=color)
 

@@ -528,7 +528,7 @@ Mixing_file_aspect_ratio = -1 ! negative means use same value as for window
          HR_xright = 0.85
          HR_ybot = 0.15
          HR_ytop = 0.85
-         HR_txt_scale = 0.7 !1.0
+         HR_txt_scale = 1.0
          HR_title = ''
 
          ! axis limits -- to override system default selections
