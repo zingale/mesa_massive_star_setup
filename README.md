@@ -40,7 +40,7 @@ enabled throughout the entire simulation.
 ### Convection
 
 Convection and semi-convection are enabled (Ledoux convection is
-enabled with `alpha_seminconvection = 1`).  The mixing lengths can be
+enabled with `alpha_semiconvection = 1`).  The mixing lengths can be
 set in `inlist_common`. Overshooting is also enabled.
 
 *Note for comparison*: the `star/test_suite/20M_pre_ms_to_core_collapse` example
@@ -72,12 +72,15 @@ The timestep limits differ as:
 | `time_delta_coeff` | 1.0 | 1.0 | Scales real-valued timestep limits and hard limits; smaller values give finer time resolution. Does not scale `varcontrol_target` or integer iteration limits. |
 | `delta_lgT_cntr_limit` | 0.002 | 0.01 | Timestep-control limit on the magnitude of the change in log10 central temperature between models. |
 | `delta_lgT_max_limit` | 0.002 | Disabled | Timestep-control limit on the magnitude of the change in log10 of the highest temperature anywhere in the star. |
-| `delta_lgRho_cntr_limit` | 0.05 | 0.05 | Timestep-control limit on the magnitude of the change in log10 central density between models. |
-| `delta_lgRho_cntr_hard_limit` | 0.1 | Disabled (-1) | Hard limit on the magnitude of the change in log10 central density; exceeding it triggers a retry with a smaller timestep. |
-| `delta_lgRho_limit` | 0.1 | 1.0 | Timestep-control limit on the largest magnitude of change in log10 density in any cell. |
-| `dX_nuc_drop_limit` | 0.01 | 0.05 | Limits the drop in an isotope's mass fraction from nuclear burning, accounting for replenishment by mixing; larger drops reduce the next timestep. |
+| `delta_lgRho_cntr_limit` | 0.01 | 0.05 | Timestep-control limit on the magnitude of the change in log10 central density between models. |
+| `delta_lgRho_cntr_hard_limit` | 0.05 | Disabled (-1) | Hard limit on the magnitude of the change in log10 central density; exceeding it triggers a retry with a smaller timestep. |
+| `delta_lgRho_limit` | 0.05 | 1.0 | Timestep-control limit on the largest magnitude of change in log10 density in any cell. |
+| `dX_nuc_drop_limit` | 0.001 | 0.05 | Limits the drop in an isotope's mass fraction from nuclear burning, accounting for replenishment by mixing; larger drops reduce the next timestep. |
 | `delta_XSi_cntr_limit` | 0.0025 | 0.01 | Limits the absolute change in central silicon mass fraction between models; larger changes reduce the next timestep. |
 | `max_timestep_factor` | 1.05 | 1.2 | Maximum ratio of the next timestep to the previous one, limiting how quickly timesteps can grow. |
+
+At high temperature, `dX_nuc_drop_limit_at_high_T = 0.01` replaces
+the standard abundance-drop limit.
 
 Composition resolution is controlled by
 
@@ -109,14 +112,15 @@ The limit on relative energy-conservation error timestep changes is disabled in 
 
 ### Residual tolerances
 
-`run_star_extras.f90` loosens the tolerances on burning convergence at
-late times (high temperatures).
+`run_star_extras.f90` loosens the tolerances on burning convergence when
+the central `log10(T/K) > 9.5` and operator-splitting is off.  With the
+current operator-splitting settings, this adjustment is inactive.
 
 ### Operator-splitting
 
-Operator-splitting of the burning is off by default.  It can be
-enabled by setting `op_split_burn = .true.` in `inlist_common`.  There
-is also a control to determine at what temperature it kicks in.
+Operator-splitting of the burning is enabled in `inlist_common` via
+`op_split_burn = .true.`, with `op_split_burn_min_T = 1e9` K setting
+the minimum temperature at which it kicks in.
 
 This may be needed for large networks.
 
