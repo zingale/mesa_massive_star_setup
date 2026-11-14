@@ -26,13 +26,9 @@ k.plot(core_masses=["He", "CO", "ONe", "Fe"],
        size=(9, 7))
 
 
-# instead, burning regions
+# instead, burning regions -- we can use the same KippenhahnDiagram
+# object
 
-k = mkipp2.KippenhahnDiagram(xaxis="collapse",
-                             time_units="yr",
-                             identifier="net_nuclear_energy",
-                             load_profiles=True,
-                             logs_dirs=logs_dirs)
 k.plot_burning_regions(core_masses=["He", "CO", "ONe", "Fe"],
                        density_contours=[1.e2, 1.e4, 1.e6, 1.e8],
                        hybrid_mode=True,
