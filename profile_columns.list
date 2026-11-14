@@ -511,7 +511,7 @@
    !log_Lconv_div_L
 
 !# Mixing
-   !mixing_type ! mixing types are defined in mesa/const/public/const_def   
+   mixing_type ! mixing types are defined in mesa/const/public/const_def   
    log_D_mix ! log10 diffusion coefficient for mixing in units of cm^2/second (Eulerian)
    !log_D_mix_non_rotation
    !log_D_mix_rotation

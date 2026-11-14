@@ -1073,5 +1073,5 @@
       !elapsed_time ! time since start of run (seconds)
 
    !## Extras
-      burning_regions 80
-      mixing_regions 80
+      burning_regions 120
+      mixing_regions 120
